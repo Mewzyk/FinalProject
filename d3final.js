@@ -19,6 +19,23 @@ var projection = d3.geoAlbers()
 
 var path = d3.geoPath()
     .projection(projection);
+
+d3.json("valleyZip.json", function(error, ca) {
+	if (error) return console.error(error);
+
+  	var valleyZip = topojson.feature(ca, ca.objects.valleyZIP);
+	
+	console.log(valleyZip.features);
+	
+	svg.append("g")
+    	.selectAll("path")
+    	.data(topojson.feature(ca, ca.objects.valleyZIP).features)
+    	.enter().append("path")
+      	.attr("fill", "black")
+		.attr("opacity", ".8")
+		.attr("d", path);
+	
+});
 			
 d3.json("siliconValley.json", function(error, ca) {
 	if (error) return console.error(error);
@@ -81,7 +98,8 @@ d3.json("siliconValley.json", function(error, ca) {
 		.data(topojson.feature(ca, ca.objects.caCounty).features)
 		.enter().append("path")
 		.attr("fill", "#000")
-		.attr("opacity", "0.2")
+		.attr("opacity", "0.1")
 		.attr("d", path)
-		
 });
+
+
