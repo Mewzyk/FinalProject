@@ -12,7 +12,7 @@ var svg = d3.select("body").append("svg")
 
 var color = d3.scaleThreshold()
     .domain([500,200000,500000,700000,2000000])
-    .range(['#fee5d9', '#fcae91', '#fb6a4a', '#de2d26', '#a50f15']);
+    .range(['#fcae91', '#fcae91', '#fb6a4a', '#de2d26', '#a50f15']);
 
 var boom = d3.schemeOrRd[9];
 
@@ -22,10 +22,8 @@ var borderPath = svg.append("rect")
     .attr("height", height)
     .attr("width", width)
     .style("stroke", "#000")
-    .style("fill", "none")
+    .attr("fill", "#add8e6")
     .style("stroke-width", "1");
-
-console.log(color(0));
 
 var projection = d3.geoAlbers()
 	.center([-26,37.7])
@@ -34,6 +32,28 @@ var projection = d3.geoAlbers()
 
 var path = d3.geoPath()
     .projection(projection);
+
+d3.json("siliconValley.json", function(error, ca) {
+	if (error) return console.error(error);
+
+  	var caCounty = topojson.feature(ca, ca.objects.caCounty);
+	
+	svg.append("g")
+		.selectAll("path")
+		.data(topojson.feature(ca, ca.objects.caCounty).features)
+		.enter().append("path")
+		.attr("fill", "#fee5d9")
+		.attr("opacity", "1")
+		.attr("d", path);
+	
+	svg.append("path")
+      	.datum(topojson.mesh(ca, ca.objects.caCounty, function(a, b) { return a != b; }))
+      	.attr("fill", "none")
+		.attr("stroke", "black")
+		.attr("stroke-opacity", "0")
+      	.attr("d", path);
+
+});
 
 d3.json("valleyZipFinal.json", function(error, ca) {
 	if (error) return console.error(error);
@@ -47,7 +67,7 @@ d3.json("valleyZipFinal.json", function(error, ca) {
       	.attr("fill", function(d){
 			currData = d.properties.Y2008_09
 			if (currData == null) {
-      			return "#fee5d9";
+      			return "#fcae91";
 			}
 			else{
 				return color(d.properties.Y2008_09);
@@ -57,25 +77,5 @@ d3.json("valleyZipFinal.json", function(error, ca) {
 		.attr("d", path);
 });
 			
-d3.json("siliconValley.json", function(error, ca) {
-	if (error) return console.error(error);
 
-  	var caCounty = topojson.feature(ca, ca.objects.caCounty);
-	
-	svg.append("g")
-		.selectAll("path")
-		.data(topojson.feature(ca, ca.objects.caCounty).features)
-		.enter().append("path")
-		.attr("fill", "#000")
-		.attr("opacity", "0")
-		.attr("d", path);
-	
-	svg.append("path")
-      	.datum(topojson.mesh(ca, ca.objects.caCounty, function(a, b) { return a != b; }))
-      	.attr("fill", "none")
-		.attr("stroke", "black")
-		.attr("stroke-opacity", "0")
-      	.attr("d", path);
-
-});
 
