@@ -11,8 +11,8 @@ var svg = d3.select("body").append("svg")
 	.style("display", "block");
 
 var color = d3.scaleThreshold()
-    .domain([500000, 200000, 300000, 400000, 500000, 600000, 700000, 2000000])
-    .range(d3.schemeOrRd[9]);
+    .domain([500,200000,500000,700000,2000000])
+    .range(['#fee5d9', '#fcae91', '#fb6a4a', '#de2d26', '#a50f15']);
 
 var boom = d3.schemeOrRd[9];
 
@@ -47,7 +47,7 @@ d3.json("valleyZipFinal.json", function(error, ca) {
       	.attr("fill", function(d){
 			currData = d.properties.Y2008_09
 			if (currData == null) {
-      			return "#fff7ec";
+      			return "#fee5d9";
 			}
 			else{
 				return color(d.properties.Y2008_09);
@@ -67,14 +67,14 @@ d3.json("siliconValley.json", function(error, ca) {
 		.data(topojson.feature(ca, ca.objects.caCounty).features)
 		.enter().append("path")
 		.attr("fill", "#000")
-		.attr("opacity", "0.1")
+		.attr("opacity", "0")
 		.attr("d", path);
 	
 	svg.append("path")
       	.datum(topojson.mesh(ca, ca.objects.caCounty, function(a, b) { return a != b; }))
       	.attr("fill", "none")
 		.attr("stroke", "black")
-		.attr("stroke-opacity", "1")
+		.attr("stroke-opacity", "0")
       	.attr("d", path);
 
 });
