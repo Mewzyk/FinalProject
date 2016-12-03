@@ -1,0 +1,12 @@
+.attr {
+	width: 1150px;
+	height: 300px;
+	background-color: lightgray;
+}
+
+.container {
+	display: inline-block;
+	height: 250px;
+	vertical-align: top;
+	margin: 0px 7px 0px 7px
+}
