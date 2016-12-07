@@ -201,10 +201,6 @@ d3.json("valleyZipFinal.json", function(error, ca) {
 	var tooltip = d3.select('body').append('div')
             .attr('class', 'hidden tooltip');
 	
-	d3.select(".neighborhood").on("click", function(){
-		//svg.selectAll(".city-border").attr("stroke-opacity", "0.3");
-		console.log(svg.selectAll(".city-border").attr("stroke-opacity"));
-	});
 	
 	
 	
