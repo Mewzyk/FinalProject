@@ -10,3 +10,9 @@
 	vertical-align: top;
 	margin: 0px 7px 0px 7px
 }
+
+.state-border {
+  	fill: none;
+  	stroke: #000;
+  	stroke-opacity: 1;
+}

@@ -14,8 +14,6 @@ var color = d3.scaleThreshold()
     .domain([500,200000,500000,700000,2000000])
     .range(['#fcae91', '#fcae91', '#fb6a4a', '#de2d26', '#a50f15']);
 
-var boom = d3.schemeOrRd[9];
-
 var borderPath = svg.append("rect")
 	.attr("x", 0)
     .attr("y", 0)
@@ -25,18 +23,23 @@ var borderPath = svg.append("rect")
     .attr("fill", "#add8e6")
     .style("stroke-width", "1");
 
-var projection = d3.geoAlbers()
-	.center([-26,37.7])
+var trueProjection = d3.geoAlbers()
+	.center([-26,37.4])
 	.parallels([37.6, 37.85])
-	.scale(50000);
+	.scale(70000);
+
+var expandedProjection = d3.geoAlbers()
+	.center([-26.15,37.55])
+	.parallels([37.6, 37.85])
+	.scale(40000);
 
 var path = d3.geoPath()
-    .projection(projection);
+    .projection(expandedProjection);
 
-d3.json("siliconValley.json", function(error, ca) {
+
+d3.json("valleyZipFinal.json", function(error, ca) {
 	if (error) return console.error(error);
 
-  	var caCounty = topojson.feature(ca, ca.objects.caCounty);
 	
 	svg.append("g")
 		.selectAll("path")
@@ -52,17 +55,10 @@ d3.json("siliconValley.json", function(error, ca) {
 		.attr("stroke", "black")
 		.attr("stroke-opacity", "0")
       	.attr("d", path);
-
-});
-
-d3.json("valleyZipFinal.json", function(error, ca) {
-	if (error) return console.error(error);
-
-  	var valleyZip = topojson.feature(ca, ca.objects.siliconValleyFinal)
 	
 	svg.append("g")
     	.selectAll("path")
-    	.data(topojson.feature(ca, ca.objects.siliconValleyFinal).features)
+    	.data(topojson.feature(ca, ca.objects.expandedValley).features)
     	.enter().append("path")
       	.attr("fill", function(d){
 			currData = d.properties.Y2008_09
@@ -72,10 +68,15 @@ d3.json("valleyZipFinal.json", function(error, ca) {
 			else{
 				return color(d.properties.Y2008_09);
 			}
-	})
+		})
 		.attr("opacity", "1")
 		.attr("d", path);
 });
+
+
+
+
+	
 			
 
 
