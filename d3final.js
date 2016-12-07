@@ -4,6 +4,8 @@ Svg Width and Height
 var mapWidth = 600,
     mapHeight = 600;
 
+var format = d3.format(",")
+
 var legWidth = 300;
 var legHeight = 600;
 
@@ -42,32 +44,6 @@ var legend = [
 	color: "#fee5d9",
 	info: "No Data"
 			 }];
-
-var box = legendBox.selectAll("g").data(legend).enter()
-	.append("g")
-	.attr("transform", function(d, i) { return "translate(0," + i * 1 + ")"; });
-
-box.append("rect")
-	.attr("width", "30px")
-	.attr("height", "30px")
-	.attr("x", "20px")
-	.attr("y", function(d, i){
-	return "" + (150 + (i * 40)) + "px";
-})
-	.attr("fill", function(d){
-	return d.color;
-});
-
-box.append("text")
-	.attr("width", "30px")
-	.attr("height", "30px")
-	.attr("x", "55px")
-	.attr("y", function(d, i){
-	return "" + (170 + (i * 40)) + "px";
-})
-	.text(function(d){
-	return d.info;
-});
 
 
 var color = d3.scaleThreshold()
@@ -121,16 +97,117 @@ d3.json("valleyZipFinal.json", function(error, ca) {
     	.data(topojson.feature(ca, ca.objects.expandedValley).features)
     	.enter().append("path")
       	.attr("fill", function(d){
-			currData = d.properties.Y2008_09
+			currData = d.properties.Y2015_09
 			if (currData == null) {
       			return "#fee5d9";
 			}
 			else{
-				return color(d.properties.Y2008_09);
+				return color(d.properties.Y2015_09);
 			}
 		})
 		.attr("opacity", "1")
-		.attr("d", path);
+		.attr("d", path)
+		.on('mousemove', function(d) {
+                    var mouse = d3.mouse(svg.node()).map(function(d) {
+                        return parseInt(d);
+                    });
+                    tooltip.classed('hidden', false)
+                        .attr('style', 'left:' + (mouse[0] + 15) +
+                                'px; top:' + (mouse[1] - 35) + 'px');
+					
+					tooltip.html("");
+					tooltip.append("p").text("ZIP: " + d.id);
+					tooltip.append("p").text("Price: " + "$" + format(d.properties.Y2015_09));
+                })
+                .on('mouseout', function() {
+                    tooltip.classed('hidden', true);
+					tooltip.html("");
+                });;
+	
+	legendBox.append("text")
+	.attr("y", "140px")
+	.attr("x", "13px")
+	.text("Average Home Sales Price by ZIP code");
+
+	var box = legendBox.selectAll("g").data(legend).enter()
+		.append("g")
+		.attr("transform", function(d, i) { return "translate(0," + i * 1 + ")"; });
+
+	box.append("rect")
+		.attr("width", "30px")
+		.attr("height", "30px")
+		.attr("x", "13px")
+		.attr("y", function(d, i){
+		return "" + (150 + (i * 40)) + "px";
+	})
+		.attr("fill", function(d){
+		return d.color;
+	});
+
+	box.append("text")
+		.attr("width", "30px")
+		.attr("height", "30px")
+		.attr("x", "48px")
+		.attr("y", function(d, i){
+		return "" + (170 + (i * 40)) + "px";
+	})
+		.text(function(d){
+		return d.info;
+	});
+	
+
+	
+	
+	
+	d3.json("cityGrid.json", function(error, city){
+		
+		svg.append("path")
+      		.datum(topojson.mesh(city, city.objects.Freemont, function(a, b) { return true; }))
+      		.attr("class", "city-border")
+      		.attr("d", path);
+		
+		svg.append("path")
+      		.datum(topojson.mesh(city, city.objects.Oakland, function(a, b) { return true; }))
+      		.attr("class", "city-border")
+      		.attr("d", path);
+		
+		svg.append("path")
+      		.datum(topojson.mesh(city, city.objects.Hayward, function(a, b) { return true; }))
+      		.attr("class", "city-border")
+      		.attr("d", path);
+		
+		svg.append("path")
+      		.datum(topojson.mesh(city, city.objects.SanJose, function(a, b) { return true; }))
+      		.attr("class", "city-border")
+      		.attr("d", path);
+		
+		svg.append("path")
+      		.datum(topojson.mesh(city, city.objects.SF, function(a, b) { return true; }))
+      		.attr("class", "city-border")
+      		.attr("d", path);
+		
+		svg.append("path")
+      		.datum(topojson.mesh(city, city.objects.PaloAlto, function(a, b) { return true; }))
+      		.attr("class", "city-border")
+      		.attr("d", path);
+		
+		svg.append("path")
+      		.datum(topojson.mesh(city, city.objects.SanMateo, function(a, b) { return true; }))
+      		.attr("class", "city-border")
+      		.attr("d", path);
+		});
+	
+		
+	var tooltip = d3.select('body').append('div')
+            .attr('class', 'hidden tooltip');
+	
+	d3.select(".neighborhood").on("click", function(){
+		//svg.selectAll(".city-border").attr("stroke-opacity", "0.3");
+		console.log(svg.selectAll(".city-border").attr("stroke-opacity"));
+	});
+	
+	
+	
 });
 
 
