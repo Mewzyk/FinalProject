@@ -25,19 +25,19 @@ var legendBox = d3.select("body").append("svg")
 var legend = [
 	{
 	color: '#a50f15',
-	info: ' < $2,000,000'
+	info: ' > $1,500,000'
 			 },
 	{
 	color: '#de2d26',
-	info: ' < $700,000'
+	info: ' < $1,000,000'
 			 },
 	{
 	color: '#fb6a4a',
-	info: " < $400,000"
+	info: " < $700,000"
 			 },
 	{
 	color: "#fcae91",
-	info: " < $200,000"
+	info: " < $400,000"
 			 },
 	{
 	
@@ -47,7 +47,7 @@ var legend = [
 
 
 var color = d3.scaleThreshold()
-    .domain([200000,400000,700000,2000000])
+    .domain([400000,700000,1000000,2000000])
     .range(['#fcae91', '#fb6a4a', '#de2d26', '#a50f15']);
 
 var borderPath = svg.append("rect")
