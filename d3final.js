@@ -112,8 +112,8 @@ d3.json("valleyZipFinal.json", function(error, ca) {
                         return parseInt(d);
                     });
                     tooltip.classed('hidden', false)
-                        .attr('style', 'left:' + (mouse[0] + 15) +
-                                'px; top:' + (mouse[1] - 35) + 'px');
+                        .attr('style', 'left:' + (mouse[0] + 10) +
+                                'px; top:' + (mouse[1]) + 'px');
 					
 					tooltip.html("");
 					tooltip.append("p").text("ZIP: " + d.id);
